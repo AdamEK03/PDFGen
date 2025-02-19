@@ -64,6 +64,14 @@ def add_person():
             return
     print("The operation has been canceled!")
 
+def show_commands_list():
+    print("--- AVAILABLE COMMANDS ---")
+    print("input - Add a new person")
+    print("pdf - Generate report in PDF")
+    print("csv - Export data to CSV")
+    print("excel - Export data to Excel")
+    print("? - show available commands")
+    print("exit - Quit program")
 command=""
 
 with open(DATA_FILE_PATH,mode="r", encoding="utf-8") as data_file:
@@ -73,11 +81,17 @@ with open(DATA_FILE_PATH,mode="r", encoding="utf-8") as data_file:
     except (FileNotFoundError, json.JSONDecodeError):
         people_data = {"Name": [], "Surname": [], "Age": []}  # Default structure
 
+is_first_command=True
 if __name__=="__main__":
     while True:
         df = pd.DataFrame(dict(people_data))
-        print("Insert command:")
-        command=input()
+
+        if is_first_command:
+            show_commands_list()
+            is_first_command=False
+            
+        command=input("\nEnter command: ").strip().lower()
+        print()
         match command:
             case "input":
                 add_person()
@@ -92,6 +106,8 @@ if __name__=="__main__":
                 print("File saved!")
             case "data":
                 print(df)
+            case "?":
+                show_commands_list()
             case "exit":
                 break
         print()
